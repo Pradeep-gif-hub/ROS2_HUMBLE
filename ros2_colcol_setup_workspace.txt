@@ -1,0 +1,39 @@
+ROS2 Workspace
+
+What it is:
+A ROS2 workspace is a folder where we keep and build our ROS packages (robot programs).
+
+Why we need it:
+It organizes robot code and lets ROS compile and run multiple packages together.
+
+Basic structure:
+ros2_ws/
+├─ src       (put packages here)
+├─ build     (build files)
+├─ install   (compiled setup files)
+└─ log       (build logs)
+
+How to create:
+
+mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws
+
+Build workspace:
+
+colcon build
+
+Activate workspace:
+
+source install/setup.bash
+
+Basic workflow:
+
+1. create workspace
+2. put packages in src
+3. run "colcon build"
+4. source install/setup.bash
+5. run ROS nodes
+
+Example command:
+
+ros2 run <package_name> <node_name>

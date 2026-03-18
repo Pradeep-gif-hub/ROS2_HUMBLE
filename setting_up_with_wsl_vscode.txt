@@ -1,0 +1,42 @@
+VS Code with WSL for ROS2
+
+What it is:
+Using VS Code connected to WSL so we can write and run ROS2 code in a proper Linux environment.
+
+Why we need it:
+ROS2 works best on Linux. WSL gives us Linux inside Windows, and VS Code provides an easy editor to write, debug, and manage ROS packages.
+
+Approach:
+
+1. Install VS Code on Windows.
+2. Install **Remote - WSL extension** in VS Code.
+3. Open the ROS workspace from WSL.
+
+Command to open workspace in VS Code from WSL:
+
+cd ~/ros2_ws
+code .
+
+Importance:
+
+* Allows editing ROS nodes easily
+* Directly runs Linux ROS tools
+* Integrates terminal, debugging, and file explorer
+* Helps manage packages inside the workspace.
+
+Typical workflow:
+
+1. Create workspace
+   mkdir -p ~/ros2_ws/src
+
+2. Create package
+   ros2 pkg create my_robot_controller --build-type ament_python --dependencies rclpy
+
+3. Build workspace
+   colcon build
+
+4. Source workspace
+   source install/setup.bash
+
+5. Run node
+   ros2 run <package_name> <node_name>
