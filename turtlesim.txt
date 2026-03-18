@@ -1,0 +1,23 @@
+Turtlesim commands
+
+ros2 run turtlesim turtlesim_node
+→ starts the turtle simulator window
+
+ros2 run turtlesim turtle_teleop_key
+→ control turtle using keyboard (w,a,s,d)
+
+rqt_graph
+→ shows graph of nodes and topics communicating in ROS
+
+rqt full form: ROS Qt
+
+
+Turtlesim
+
+Turtlesim is a simple 2D simulator in ROS2 where a turtle moves inside a window.
+
+Purpose:
+It is used to learn basic ROS concepts like nodes, topics, publishers, subscribers, and message passing without using a real robot.
+
+Why we use it:
+It provides an easy visual way to understand how ROS nodes communicate and control robot movement.
