@@ -1,0 +1,32 @@
+Creating a ROS2 Package
+
+Command:
+ros2 pkg create my_robot_controller --build-type ament_python --dependencies rclpy
+
+What it does:
+Creates a new ROS2 package named **my_robot_controller**.
+
+Requirements:
+
+* ROS2 installed
+* Workspace created (ros2_ws)
+* Inside the **src** folder of workspace
+
+Meaning of options:
+
+ros2 pkg create
+→ command to create a new ROS2 package
+
+my_robot_controller
+→ name of the package
+
+--build-type ament_python
+→ package will use Python
+
+--dependencies rclpy
+→ adds ROS2 Python client library dependency
+
+Where to run:
+
+cd ~/ros2_ws/src
+ros2 pkg create my_robot_controller --build-type ament_python --dependencies rclpy
