@@ -1,0 +1,35 @@
+so basicaally a Node is kind of labour worker for the Robots, 
+kind of executable and computational small bits of job that will be executed and interatcts with other node..
+like 
+
+-> ros2 run demo_nodes_cpp talker,
+-> ros2 run demo_nodes_cpp listener
+
+-> here we see the package as ros2 and the package name as demo_node_cpp adn the message name as 
+' TALKER or LISTENER'
+
+ROS2 rqt_graph issue in WSL
+
+Problem:
+Running `rqt_graph` shows error:
+QStandardPaths: error creating runtime directory '/run/user/1000/' (Permission denied)
+
+Reason:
+`rqt_graph` is a Qt GUI tool. Qt requires a runtime directory (`XDG_RUNTIME_DIR`).
+In WSL this directory is not automatically created, so the GUI cannot start.
+
+Fix:
+
+sudo mkdir -p /run/user/1000
+sudo chown pradeep:pradeep /run/user/1000
+chmod 700 /run/user/1000
+export XDG_RUNTIME_DIR=/run/user/1000
+
+Purpose:
+Creates the runtime directory and gives permission so Qt-based ROS tools like `rqt_graph` can run.
+
+Usage:
+
+1. ros2 run demo_nodes_cpp talker
+2. ros2 run demo_nodes_cpp listener
+3. rqt_graph
