@@ -1,0 +1,59 @@
+ROS2 Subscriber Node in Python (Simple Notes)
+
+What is a Subscriber?
+
+A subscriber is a node that listens to a topic and receives data published by another node.
+
+Example:
+
+Talker Node → /chatter → Listener Node
+
+The listener receives messages from the talker.
+
+---
+
+Basic Steps to Create a Subscriber
+
+1. Import ROS libraries
+
+import rclpy
+from rclpy.node import Node
+
+2. Import message type
+
+from std_msgs.msg import String
+
+3. Create Node
+
+class MySubscriber(Node):
+
+4. Create subscription
+
+self.subscription = self.create_subscription(
+String,
+'/chatter',
+self.listener_callback,
+10)
+
+5. Process received data in callback function
+
+---
+
+Example Callback
+
+When a message is received, the node prints it.
+
+Example idea:
+
+def listener_callback(self, msg):
+self.get_logger().info("Received: " + msg.data)
+
+---
+
+Summary
+
+Subscriber listens to a topic and receives messages from a publisher.
+
+Publisher → sends data
+Topic → communication channel
+Subscriber → receives and processes data

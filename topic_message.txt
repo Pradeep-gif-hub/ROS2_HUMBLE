@@ -1,0 +1,56 @@
+ROS2 Topics (Simple Notes)
+
+What is a ROS2 Topic?
+
+A ROS2 topic is a communication channel used by nodes to exchange data.
+It allows one node to send information while other nodes receive it.
+
+Basic idea:
+
+Publisher Node → Topic → Subscriber Node
+
+Publisher sends data to the topic, and subscribers receive the data.
+
+Example:
+
+Talker Node → /chatter → Listener Node
+
+---
+
+Why Topics are used
+
+* Allow communication between different nodes
+* Enable real-time data sharing
+* Multiple nodes can subscribe to the same topic
+
+Example in robots:
+
+Camera node → publishes images
+Navigation node → publishes movement commands
+Motor node → receives movement commands
+
+---
+
+Useful ROS2 Topic Commands
+
+List topics
+ros2 topic list
+
+View data from a topic
+ros2 topic echo /chatter
+
+Check topic information
+ros2 topic info /chatter
+
+Publish test message
+ros2 topic pub /chatter std_msgs/msg/String "data: Hello"
+
+---
+
+Summary
+
+Publisher → sends data
+Topic → communication channel
+Subscriber → receives data
+
+Topics are mainly used for continuous data like sensor readings, robot movement, and system updates.
