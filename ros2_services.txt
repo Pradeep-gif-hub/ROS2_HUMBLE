@@ -1,0 +1,95 @@
+# Create a TXT file explaining ROS2 services using pypandoc as required
+import pypandoc
+
+text_md = """
+# ROS2 Services – Definition and Explanation
+
+## What is a ROS2 Service?
+A ROS2 Service is a communication mechanism in ROS2 that allows one node to send a request to another node and receive a response. 
+It follows a request–response model, similar to how a function call works in programming.
+
+In ROS2, services are used when a node needs to perform a specific task and return a result immediately.
+
+Example:
+A robot node may request another node to calculate something or perform an action, and the second node sends the result back.
+
+---
+
+## Basic Structure of a ROS2 Service
+
+Service Server:
+The node that provides the service and processes incoming requests.
+
+Service Client:
+The node that sends a request to the service server.
+
+Service Message Type:
+Defines the request and response structure.
+
+Example service type:
+AddTwoInts
+
+Request:
+a
+b
+
+Response:
+sum
+
+---
+
+## Why ROS2 Services are Used
+
+1. For synchronous communication between nodes.
+2. When a node needs an immediate response.
+3. To perform specific tasks like calculations, commands, or configuration.
+4. To control robot actions such as resetting sensors or spawning objects.
+
+---
+
+## Example in ROS2
+
+Service Name:
+/add_two_ints
+
+Client sends:
+a = 5
+b = 3
+
+Server returns:
+sum = 8
+
+---
+
+## Difference Between Topics and Services
+
+Topics:
+Used for continuous data streaming (publisher → subscriber).
+
+Services:
+Used for request–response interactions.
+
+---
+
+## Simple Real-World Example
+
+Imagine a robot asking a navigation node:
+
+"Calculate the shortest path to this location."
+
+The navigation node processes the request and returns the path.
+
+This interaction is done using a ROS2 Service.
+
+---
+
+## Summary
+
+ROS2 Services provide a reliable request-response communication system between nodes. 
+They are mainly used when an action needs a result immediately rather than continuous data streaming.
+"""
+
+output_path = "/mnt/data/ros2_services_definition.txt"
+pypandoc.convert_text(text_md, 'plain', format='md', outputfile=output_path, extra_args=['--standalone'])
+
+output_path
