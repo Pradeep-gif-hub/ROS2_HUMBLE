@@ -1,0 +1,84 @@
+cat << 'EOF' > ~/ROS2_BASICS_CHEATSHEET.txt
+================================================================================
+                    ROS 2 BASICS & WORKSPACE CHEATSHEET
+================================================================================
+
+1. CORE CONCEPTS
+--------------------------------------------------------------------------------
+* Workspace (~/ros2_ws):
+  The project directory. Contains:
+  - src/      : Source code packages (where you write code).
+  - build/    : Intermediate compilation artifacts.
+  - install/  : Built binaries, scripts, and environment hooks.
+  - log/      : Build and runtime logs.
+
+* Node:
+  A single executing program/process performing a robotics task (e.g., motor 
+  driver, camera streamer, path planner). Nodes communicate across the ROS graph.
+
+* Topic:
+  A named channel for unidirectional, streaming data (Publish/Subscribe pattern).
+  The publisher broadcasts data without caring who or how many nodes receive it.
+
+* Message (.msg):
+  The strict data structure defining what data travels across a topic (e.g., 
+  integers, floats, booleans, strings, arrays).
+
+* Service (.srv):
+  A two-way request/response pattern (Client/Server). Used for trigger-based 
+  actions, state changes, or calculations.
+  - Server: Owns the resource, executes logic, and validates input.
+  - Client: Sends requests and waits for a response.
+
+* Colcon:
+  The ROS 2 build tool.
+  - colcon build : Compiles packages.
+  - --symlink-install : Creates direct links between src/ and install/ so Python 
+    code edits take effect immediately without rebuilding.
+
+* Sourcing:
+  Adding paths to environment variables (PATH, AMENT_PREFIX_PATH) so the shell 
+  knows where to look for ROS 2 tools and your custom workspace executables.
+  - source /opt/ros/humble/setup.bash (Underlay)
+  - source ~/ros2_ws/install/setup.bash (Overlay)
+
+
+2. ESSENTIAL CLI COMMANDS
+--------------------------------------------------------------------------------
+[Nodes]
+ros2 node list                     : List active nodes on the network graph.
+ros2 node info <node_name>         : Show publishers, subscribers, services for a node.
+
+[Topics]
+ros2 topic list                    : List active topics.
+ros2 topic echo <topic_name>       : Stream live messages from a topic to the screen.
+ros2 topic hz <topic_name>         : Check publishing frequency (Hz).
+ros2 topic info <topic_name>       : Check message type and publisher/subscriber count.
+
+[Services]
+ros2 service list                  : List available service endpoints.
+ros2 service type <service_name>   : Print the service interface type.
+ros2 service call <service_name> <srv_type> "<arguments_in_yaml>"
+                                   : Call a service manually from terminal.
+
+[Interfaces & Packages]
+ros2 interface show <type>         : Print fields inside a .msg or .srv file.
+ros2 pkg list                      : List all installed packages.
+ros2 pkg create --build-type <type> <pkg_name> --dependencies <deps>
+                                   : Create a new ament_python or ament_cmake package.
+
+[Visualization]
+rqt_graph                          : Interactive GUI showing node/topic connections.
+
+
+3. SUMMARY: TOPICS VS SERVICES
+--------------------------------------------------------------------------------
+Feature           | Topics (Pub/Sub)         | Services (Client/Server)
+------------------+--------------------------+----------------------------------
+Direction         | One-way (Unidirectional) | Two-way (Request -> Response)
+Pattern           | Streaming / Continuous   | Event-driven / On-demand
+State Ownership   | Distributed              | Centralized on Server
+Best For          | Sensor readings, camera, | Calibrating, resetting states,
+                  | robot velocity (/cmd_vel)| motor toggles, calculations
+================================================================================
+EOF
