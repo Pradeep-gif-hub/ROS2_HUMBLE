@@ -1,0 +1,77 @@
+===============================================================================
+ROS 2 Humble & Gazebo Sim: Mobile Robot Architecture & Learnings
+===============================================================================
+
+1. GAZEBO SIM VS. RVIZ2
+-------------------------------------------------------------------------------
+- Gazebo Sim:
+  * Physics simulator (Rigid-body dynamics, inertia, gravity, collisions).
+  * Simulates physical hardware sensors (e.g., GPU LiDAR ray casting).
+  * Represents the real external physical world.
+
+- RViz2:
+  * 3D visualization and diagnostics interface.
+  * No physics, no collisions, no dynamics.
+  * Visualizes the robot's internal perception: coordinate frames (TF),
+    LaserScan arrays, occupancy grid maps, and URDF joint linkages.
+
+2. CORE SYSTEM ARCHITECTURE & DATA FLOW
+-------------------------------------------------------------------------------
+ [Gazebo Engine]
+      | (Ignition Transport)
+      v
+ [ros_gz_bridge (parameter_bridge)]
+      | (ROS 2 Topics)
+      +--> /clock     [rosgraph_msgs/msg/Clock]     -> Synchronizes ROS nodes
+      +--> /cmd_vel   [geometry_msgs/msg/Twist]     -> Motor velocity control
+      +--> /odom      [nav_msgs/msg/Odometry]       -> Diff-drive kinematics
+      +--> /scan      [sensor_msgs/msg/LaserScan]   -> 2D LiDAR range arrays
+      +--> /tf        [tf2_msgs/msg/TFMessage]      -> Dynamic frame transforms
+      |
+      v
+ [robot_state_publisher] -> Computes full kinematics via URDF -> /tf
+      |
+      v
+ [RViz2 Displays]        -> Visualizes RobotModel, TF Tree, and LaserScan
+
+3. CRITICAL GOTCHAS & DEBUGGING LESSONS LEARNED
+-------------------------------------------------------------------------------
+1. Simulation Clock Sync:
+   - When running simulation, always pass `use_sim_time:=True` to RViz and 
+     ROS nodes.
+   - Without `/clock` bridged from Gazebo, RViz time remains at 0.00 and 
+     transform lookups time out (`Message removed because it is too old`).
+
+2. Bridge Directionality:
+   - Command topics (`/cmd_vel`) require bidirectional bridges (`@`).
+   - Sensor/sim data (`/clock`, `/scan`, `/odom`, `/tf`) should be one-way 
+     from Gazebo to ROS (`[`) to avoid feedback loops and time jumps.
+
+3. TF Tree Hierarchy:
+   - Base Chain: odom -> base_footprint -> base_link -> laser_frame
+   - `odom -> base_footprint` is published dynamically by the diff-drive plugin.
+   - `base_link -> laser_frame` is published by `robot_state_publisher`.
+
+4. LiDAR Ray Surface Reflection:
+   - 2D LiDAR sensors only register points when the planar sweep hits an obstacle.
+   - Obstacles must have valid collision geometry and be placed at the 
+     correct height (Z) relative to the laser plane to reflect rays.
+
+4. STANDARD RUN COMMANDS
+-------------------------------------------------------------------------------
+# 1. Clean background simulation processes:
+killall -9 ruby ign gazebo parameter_bridge rviz2 robot_state_publisher
+
+# 2. Build workspace:
+cd ~/ros2_ws && colcon build --symlink-install --packages-select my_robot_description
+source install/setup.bash
+
+# 3. Launch simulation:
+ros2 launch my_robot_description sim.launch.py
+
+# 4. Launch RViz:
+ros2 run rviz2 rviz2 --ros-args -p use_sim_time:=True
+
+# 5. Drive via keyboard:
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+===============================================================================
